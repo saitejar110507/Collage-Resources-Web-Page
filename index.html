@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>College Learning Resources</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free and Open College Learning Resources - PDFs, Videos, Docs, and more.">
+    <meta name="keywords" content="College, Learning, Resources, PDFs, Videos, Docs, Notes">
+    <meta name="author" content="Your Name or College Name">
+    <meta name="robots" content="index, follow">
+
+    <link rel="icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<noscript><p style="text-align:center;">Please enable JavaScript to view files.</p></noscript>
+
+<header>📚 College Learning Resources</header>
+
+<div id="controls">
+    <input type="text" id="searchBar" aria-label="Search Files" placeholder="Search files...">
+    <select id="sortSelect" aria-label="Sort Files">
+        <option value="date">Sort by Date</option>
+        <option value="name">Sort by Name</option>
+        <option value="size">Sort by Size</option>
+    </select>
+    <button class="filterBtn" onclick="applyFilter('all')">All</button>
+    <button class="filterBtn" onclick="applyFilter('pdf')">PDFs</button>
+    <button class="filterBtn" onclick="applyFilter('video')">Videos</button>
+    <button class="filterBtn" onclick="applyFilter('zip')">Zips</button>
+    <button class="filterBtn" onclick="applyFilter('doc')">Docs</button>
+    <button id="darkModeToggle" aria-label="Toggle Dark Mode">🌙 Dark Mode</button>
+</div>
+
+<div id="sortIndicator">Sorted by Date</div>
+<ul id="fileList" role="list"></ul>
+<p class="message" id="message"></p>
+<div id="loader" role="status" aria-live="polite" style="display:none;">
+    <div class="spinner"></div>
+</div>
+<button id="loadMoreBtn" style="display:none;">Load More</button>
+
+<script src="script.js"></script>
+</body>
+</html>
