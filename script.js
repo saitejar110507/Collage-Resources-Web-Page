@@ -46,7 +46,8 @@ function renderFiles(files) {
     const list = document.getElementById('fileList');
     list.innerHTML = '';
     if (!files.length) {
-        document.getElementById('message').textContent = 'No files found.'; return;
+        document.getElementById('message').textContent = 'No files found.'; 
+        return;
     }
     document.getElementById('message').textContent = '';
     files.forEach(file => {
@@ -63,14 +64,30 @@ function renderFiles(files) {
             <span class="fileDate">Date: ${formatDate(file.date)}</span>
         `;
 
+        const buttonDiv = document.createElement('div');
+        buttonDiv.className = 'fileActions';
+
+        // "View" button - only for PDF, video, doc
+        if (['pdf', 'video', 'doc'].includes(file.filetype)) {
+            const viewBtn = document.createElement('a');
+            viewBtn.href = file.download_url || '#';
+            viewBtn.className = 'viewBtn';
+            viewBtn.textContent = 'View';
+            viewBtn.target = '_blank';
+            buttonDiv.appendChild(viewBtn);
+        }
+
+        // "Download" button - for all
         const downloadBtn = document.createElement('a');
         downloadBtn.href = file.download_url || '#';
         downloadBtn.className = 'downloadBtn';
         downloadBtn.textContent = 'Download';
         downloadBtn.target = '_blank';
+        downloadBtn.setAttribute('download', '');
+        buttonDiv.appendChild(downloadBtn);
 
         li.appendChild(infoDiv);
-        li.appendChild(downloadBtn);
+        li.appendChild(buttonDiv);
         list.appendChild(li);
     });
 
