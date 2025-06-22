@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-const fetch = require('node-fetch');
 const app = express();
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
@@ -49,7 +48,7 @@ app.get('/api/files', async (req, res) => {
     }
 });
 
-// Proxy route to enable 'View' feature
+// Proxy route to enable 'View' feature (fixed with axios stream)
 app.get('/view', async (req, res) => {
     const fileUrl = req.query.url;
     if (!fileUrl) {
@@ -57,14 +56,17 @@ app.get('/view', async (req, res) => {
     }
 
     try {
-        const response = await fetch(fileUrl);
-        const contentType = response.headers.get('content-type');
-        
-        res.setHeader('Content-Type', contentType);
-        res.setHeader('Content-Disposition', 'inline'); // Important for browser view
-        response.body.pipe(res);
+        const response = await axios({
+            method: 'GET',
+            url: fileUrl,
+            responseType: 'stream'
+        });
+
+        res.setHeader('Content-Type', response.headers['content-type'] || 'application/octet-stream');
+        res.setHeader('Content-Disposition', 'inline'); // Important: tells browser to view
+        response.data.pipe(res); // Proper stream pipe
     } catch (error) {
-        console.error('Error fetching file for viewing:', error);
+        console.error('Error fetching file for viewing:', error.message);
         res.status(500).send('Error fetching file for viewing');
     }
 });
