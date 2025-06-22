@@ -1,4 +1,4 @@
-const apiEndpoint = 'https://yourdomain.com/api/files';
+const apiEndpoint = 'http://localhost:3000/api/files';
 let allFiles = [], filteredFiles = [], visibleCount = 10;
 
 async function fetchFiles() {
