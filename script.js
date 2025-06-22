@@ -1,4 +1,5 @@
 const apiEndpoint = 'https://collage-resources.onrender.com/api/files';
+const viewEndpoint = 'https://collage-resources.onrender.com/view';
 let allFiles = [], filteredFiles = [], visibleCount = 10;
 
 async function fetchFiles() {
@@ -46,10 +47,11 @@ function renderFiles(files) {
     const list = document.getElementById('fileList');
     list.innerHTML = '';
     if (!files.length) {
-        document.getElementById('message').textContent = 'No files found.'; 
+        document.getElementById('message').textContent = 'No files found.';
         return;
     }
     document.getElementById('message').textContent = '';
+
     files.forEach(file => {
         const li = document.createElement('li');
         li.className = 'fileItem';
@@ -70,7 +72,7 @@ function renderFiles(files) {
         // "View" button - only for PDF, video, doc
         if (['pdf', 'video', 'doc'].includes(file.filetype)) {
             const viewBtn = document.createElement('a');
-            viewBtn.href = file.download_url || '#';
+            viewBtn.href = `${viewEndpoint}?url=${encodeURIComponent(file.download_url)}`;
             viewBtn.className = 'viewBtn';
             viewBtn.textContent = 'View';
             viewBtn.target = '_blank';
