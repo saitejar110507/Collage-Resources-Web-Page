@@ -1,4 +1,4 @@
-const apiEndpoint = 'http://localhost:3000/api/files';
+const apiEndpoint = 'https://collage-resources-web-page.onrender.com';
 let allFiles = [], filteredFiles = [], visibleCount = 10;
 
 async function fetchFiles() {

@@ -1,31 +1,45 @@
+require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
-const app = express();
 const cors = require('cors');
+const app = express();
 
-const TELEGRAM_TOKEN = '7710612613:AAHZ71hmWVq2lqQwXmarwAWYQIkXST00kAg'; // Replace this
-const CHAT_ID = '1002782089113'; // Replace this (starts with -100)
+const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
+const CHAT_ID = process.env.CHAT_ID;
 
-app.use(cors()); // Allow frontend requests
+app.use(cors());
 
+// Root route
+app.get('/', (req, res) => {
+    res.send('Telegram API server is running.');
+});
+
+// /api/files route
 app.get('/api/files', async (req, res) => {
     try {
-        const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/getUpdates`;
-        const response = await axios.get(url);
-        const messages = response.data.result;
+        const updatesUrl = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/getUpdates`;
+        const updatesResponse = await axios.get(updatesUrl);
+        const messages = updatesResponse.data.result;
 
-        const files = messages
-            .filter(msg => msg.channel_post && msg.channel_post.document)
-            .map(msg => {
-                const doc = msg.channel_post.document;
-                return {
-                    filename: doc.file_name,
-                    filetype: getFileType(doc.file_name),
-                    filesize: doc.file_size,
-                    date: new Date(msg.channel_post.date * 1000).toISOString(),
-                    download_url: `https://api.telegram.org/file/bot${TELEGRAM_TOKEN}/${doc.file_id}`
-                };
-            });
+        const docMessages = messages.filter(msg => msg.channel_post && msg.channel_post.document);
+
+        const files = await Promise.all(docMessages.map(async (msg) => {
+            const doc = msg.channel_post.document;
+            const fileId = doc.file_id;
+
+            const fileResponse = await axios.get(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/getFile?file_id=${fileId}`);
+            const filePath = fileResponse.data.result.file_path;
+
+            const downloadUrl = `https://api.telegram.org/file/bot${TELEGRAM_TOKEN}/${filePath}`;
+
+            return {
+                filename: doc.file_name,
+                filetype: getFileType(doc.file_name),
+                filesize: doc.file_size,
+                date: new Date(msg.channel_post.date * 1000).toISOString(),
+                download_url: downloadUrl
+            };
+        }));
 
         res.json(files);
     } catch (err) {
