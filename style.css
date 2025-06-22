@@ -4,6 +4,8 @@
     --card-bg: #fff;
     --btn-bg: #4a69bd;
     --btn-hover: #3b4f93;
+    --view-btn-bg: #28a745;
+    --view-btn-hover: #218838;
 }
 
 [data-theme="dark"] {
@@ -12,6 +14,8 @@
     --card-bg: #2a2a2a;
     --btn-bg: #6a89cc;
     --btn-hover: #4b6ea8;
+    --view-btn-bg: #28a745;
+    --view-btn-hover: #218838;
 }
 
 body {
@@ -98,6 +102,16 @@ header {
     color: gray;
 }
 
+/* New: Action button container */
+.fileActions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    flex: 1 1 35%;
+}
+
+/* Download Button */
 .downloadBtn {
     background: var(--btn-bg);
     padding: 8px 12px;
@@ -105,10 +119,26 @@ header {
     border-radius: 5px;
     color: white;
     text-decoration: none;
+    transition: background 0.3s;
 }
 
 .downloadBtn:hover {
     background: var(--btn-hover);
+}
+
+/* View Button */
+.viewBtn {
+    background: var(--view-btn-bg);
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.viewBtn:hover {
+    background: var(--view-btn-hover);
 }
 
 #loader {
@@ -141,10 +171,15 @@ header {
 @media (max-width: 600px) {
     .fileItem {
         flex-direction: column;
+        align-items: flex-start;
     }
-    .downloadBtn {
+    .fileActions {
         width: 100%;
+        justify-content: space-between;
         margin-top: 10px;
+    }
+    .fileActions a {
+        width: 48%;
         text-align: center;
     }
 }
