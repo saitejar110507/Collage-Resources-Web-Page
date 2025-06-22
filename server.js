@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+const fetch = require('node-fetch');
 const app = express();
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
@@ -45,6 +46,26 @@ app.get('/api/files', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send('Error fetching files');
+    }
+});
+
+// Proxy route to enable 'View' feature
+app.get('/view', async (req, res) => {
+    const fileUrl = req.query.url;
+    if (!fileUrl) {
+        return res.status(400).send('Missing file URL');
+    }
+
+    try {
+        const response = await fetch(fileUrl);
+        const contentType = response.headers.get('content-type');
+        
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Disposition', 'inline'); // Important for browser view
+        response.body.pipe(res);
+    } catch (error) {
+        console.error('Error fetching file for viewing:', error);
+        res.status(500).send('Error fetching file for viewing');
     }
 });
 
