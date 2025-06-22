@@ -1,4 +1,4 @@
-const apiEndpoint = 'https://collage-resources-web-page.onrender.com/api/files';
+const apiEndpoint = 'https://collage-resources.onrender.com/api/files';
 let allFiles = [], filteredFiles = [], visibleCount = 10;
 
 async function fetchFiles() {
