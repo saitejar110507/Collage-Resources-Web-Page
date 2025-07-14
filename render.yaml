@@ -1,1 +1,19 @@
+# Uncomment this section if you're deploying a static site (HTML/CSS/JS or React, Vue, etc.)
+# services:
+#   - type: web
+#     name: collage-resources-web
+#     env: static
+#     branch: main
+#     buildCommand: npm run build     # Change/remove if you don’t use a build step
+#     staticPublishPath: build        # Change to 'public' if not using React/Vite/etc.
+
+# Uncomment this section if you're deploying a Node.js backend (e.g., Express server)
+services:
+  - type: web
+    name: collage-resources-web
+    env: node
+    branch: main
+    buildCommand: npm install
+    startCommand: node server.js      # Change to your actual start script if needed
+    plan: free
 
